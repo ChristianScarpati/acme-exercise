@@ -59,7 +59,7 @@ I made the functions inside the controllers, breaking it into small pieces of lo
 - Upload to github.
 
 The tasks were made by scrum methodology 
-[trello](images/Trello.png)
+[trello](images/Trello.png) (click to go to the image)
 
 
 
