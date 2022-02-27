@@ -29,7 +29,7 @@ This application runs on nodeJs, therefore, requires it, please visit [Node.js](
 
 1) clone the project to your local machine : 
      ```sh
-     git clone "https://github.com/ChristianScarpati/acme-exercise"
+     git clone https://github.com/ChristianScarpati/acme-exercise
      ```
 
 2) From the root of the app, install the dependencies.
@@ -53,10 +53,13 @@ I made the functions inside the controllers, breaking it into small pieces of lo
 
 - I created and set up the environment configurations with nodejs and tester jest.
 - Developed sketches and flowcharts
-- I used Trello to go step by step using the S.M.A.R.T. Approach. ----> [trello](images/Trello.png)
+- I used Trello to go step by step using the S.M.A.R.T. Approach. 
 - I separated the project structure through folders (controllers, utils, images, etc).
 - Code development through functions that fulfill a particular feature.
 - Upload to github.
+
+The tasks were made by scrum methodology 
+![trello](images/Trello.png)
 
 
 
