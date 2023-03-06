@@ -21,54 +21,33 @@ const parseDocumentData = (data) => {
 };
 
 //check the coincidence between employees
-const checkCoincidences = (array1, array2) => {
-  let coincidences = 0;
-
-  for (const element of array1) {
-    if (array2.includes(element)) {
-      coincidences++;
-    }
-  }
-
-  return coincidences;
-};
+const checkCoincidences = (array1, array2) =>
+  array1.filter((element) => array2.includes(element)).length;
 
 const getFirstObjectKey = (object) => {
   return Object.keys(object)[0];
+};
+
+const printResult = (employee1, employee2, coincidences) => {
+  if (employee1 !== employee2) {
+    console.table(`${employee1} - ${employee2} ----> coincidencias ${coincidences}`);
+  }
 };
 
 const IterationOfNames = (employeesArray) => {
   const employeeSchedules = employeesArray[0][getFirstObjectKey(employeesArray[0])];
 
   employeeSchedules.forEach((_, j) => {
-    const {
-      [j]: {
-        [getFirstObjectKey(employeesArray[j])]: employee1,
-        [getFirstObjectKey(employeesArray[j])]: schedule1,
-      },
-    } = employeesArray;
+    const employee1Name = getFirstObjectKey(employeesArray[j]);
+    const employee1Schedule = employeesArray[j][employee1Name];
 
     employeeSchedules.forEach((_, i) => {
-      const {
-        [i]: {
-          [getFirstObjectKey(employeesArray[i])]: employee2,
-          [getFirstObjectKey(employeesArray[i])]: schedule2,
-        },
-      } = employeesArray;
+      const employee2Name = getFirstObjectKey(employeesArray[i]);
+      const employee2Schedule = employeesArray[i][employee2Name];
 
-      // schedule 1 and schedule 2 are the schedules of the employees
-      // employee 1 y employee 2 are the names of the employees
+      const coincidences = checkCoincidences(employee1Schedule, employee2Schedule);
 
-      const coincidences = checkCoincidences(schedule1, schedule2);
-
-      const employeesNamesJ = getFirstObjectKey(employeesArray[j]);
-      const employeeNamesI = getFirstObjectKey(employeesArray[i]);
-
-      if (employee1 !== employee2) {
-        console.table(
-          `${employeesNamesJ} - ${employeeNamesI} ----> coincidencias ${coincidences}`
-        );
-      }
+      printResult(employee1Name, employee2Name, coincidences);
     });
   });
 };
