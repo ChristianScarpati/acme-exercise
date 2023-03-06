@@ -1,79 +1,76 @@
-const { regExpTimes: getTimes, regExpNames: getNames } = require('../utils/global.js')
+const { regExpTimes: getTimes, regExpNames: getNames } = require("../utils/global.js");
 
 //convert the data to data Array
-const returnDataOnArray = (data) => {
-     let arrayData = []
-     let array = data.toString().split('\n')
-     for (i in array) {
-          const names = array[i].match(getNames)[0]
-          try {
-               const timeWorked = array[i].match(getTimes)[0]
-               const arrayOfTime = timeWorked.split(',')
-               arrayData.push({ [names]: arrayOfTime })
-          } catch (error) {
-               console.error('An error has occured with the data names.')
-          }
-     }
-     return arrayData
-}
+const parseDocumentData = (data) => {
+  const lines = data.toString().split("\n");
+  let arrayData = [];
+
+  for (const line of lines) {
+    const [names] = line.match(getNames) || [];
+    const [timeWorked] = line.match(getTimes) || [];
+
+    try {
+      const arrayOfTime = timeWorked.split(",");
+      arrayData.push({ [names]: arrayOfTime });
+    } catch (error) {
+      console.error(`An error has occured with the data names: ${error}`);
+    }
+  }
+
+  return arrayData;
+};
 
 //check the coincidence between employees
-const checkCoincidences = (array1, array2) => {
-     const mapObject = {};
-     let coincidences;
+const checkCoincidences = (array1, array2) =>
+  array1.filter((element) => array2.includes(element)).length;
 
-     array1.forEach(i => mapObject[i] = false);
-     array2.forEach(i => mapObject[i] === false && (mapObject[i] = true));
+const getFirstObjectKey = (object) => {
+  return Object.keys(object)[0];
+};
 
-     coincidences = Object.keys(mapObject)
-          .map(k => ({ name: k, matched: mapObject[k] }))
-          .filter(x => x.matched == true);
+const printResult = (employee1, employee2, coincidences) => {
+  if (employee1 !== employee2) {
+    console.table(`${employee1} - ${employee2} ----> coincidencias ${coincidences}`);
+  }
+};
 
-     return coincidences.length
-}
-
-// Nested Loop of employees.
 const IterationOfNames = (employeesArray) => {
+  const employeeSchedules = employeesArray[0][getFirstObjectKey(employeesArray[0])];
 
-     const employeeSchedules = employeesArray[0][Object.keys(employeesArray[0])]
+  employeeSchedules.forEach((_, j) => {
+    const employee1Name = getFirstObjectKey(employeesArray[j]);
+    const employee1Schedule = employeesArray[j][employee1Name];
 
-     for (let j = 0; j < employeeSchedules.length; j++) { 
-          for (let i = 0; i < employeeSchedules.length; i++) { 
-               
-               const employee1 = Object.keys(employeesArray[j])[0]
-               const employee2 = Object.keys(employeesArray[i])[0]
+    employeeSchedules.forEach((_, i) => {
+      const employee2Name = getFirstObjectKey(employeesArray[i]);
+      const employee2Schedule = employeesArray[i][employee2Name];
 
-               const schedule1 = employeesArray[j][Object.keys(employeesArray[j])]
-               const schedule2 = employeesArray[i][Object.keys(employeesArray[i])]
+      const coincidences = checkCoincidences(employee1Schedule, employee2Schedule);
 
-               const coincidences = checkCoincidences(schedule1, schedule2)
-
-               if (employee1 !== employee2) {
-                    console.table(`${employee1} - ${employee2} ----> coincidencias ${coincidences}`)
-               }
-          }
-     }
-
-}
-
+      printResult(employee1Name, employee2Name, coincidences);
+    });
+  });
+};
 
 const typesOfData = (data) => {
-     if (typeof data == 'string') return false
-     if (typeof data == 'object') return true
+  if (typeof data == "string") return false;
+  if (typeof data == "object") return true;
 
-     return false
-}
+  return false;
+};
 
 const filenameTxt = (arg) => {
-     if (arg === './documents/employees.txt') {
-          return ('./documents/employees.txt')
-     } else {
-          return arg
-     }
-}
+  if (arg === "./documents/employees.txt") {
+    return "./documents/employees.txt";
+  } else {
+    return arg;
+  }
+};
 
-
-
-
-module.exports = { checkCoincidences, IterationOfNames, returnDataOnArray, typesOfData, filenameTxt }
-
+module.exports = {
+  checkCoincidences,
+  IterationOfNames,
+  parseDocumentData,
+  typesOfData,
+  filenameTxt,
+};
